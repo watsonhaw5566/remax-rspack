@@ -1,0 +1,44 @@
+{
+  "name": "remax",
+  "version": "3.7.4",
+  "description": "Remax 是一个全新的基于 React 的小程序开发框架",
+  "main": "./cjs/index.js",
+  "module": "./esm/index.js",
+  "types": "./esm/index.d.ts",
+  "bin": {
+    "remax": "./bin/remax"
+  },
+  "keywords": [
+    "react",
+    "miniapp",
+    "mini-program",
+    "wechat"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/remaxjs/remax/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/remaxjs/remax.git"
+  },
+  "homepage": "https://remaxjs.org",
+  "scripts": {
+    "prebuild": "rm -rf cjs esm",
+    "build": "tsc",
+    "build:cjs": "tsc --module CommonJS --outDir cjs",
+    "prepack": "yarn build"
+  },
+  "dependencies": {
+    "@remax/ali": "workspace:*",
+    "@remax/cli": "workspace:*",
+    "@remax/macro": "workspace:*",
+    "@remax/one": "workspace:*",
+    "@remax/runtime": "workspace:*",
+    "@remax/toutiao": "workspace:*",
+    "@remax/types": "workspace:*",
+    "@remax/web": "workspace:*",
+    "@remax/wechat": "workspace:*"
+  },
+  "gitHead": "14d4b95d916a55e4ecbe5fbda933bbc57018d7df"
+}

@@ -1,0 +1,51 @@
+{
+  "name": "@remax/component-scripts",
+  "version": "3.7.4",
+  "description": "Remax 是一个全新的基于 React 的小程序开发框架",
+  "main": "./lib/index.js",
+  "bin": {
+    "remax-component-script": "./bin/index.js"
+  },
+  "keywords": [
+    "react",
+    "miniapp",
+    "mini-program",
+    "wechat"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/remaxjs/remax/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/remaxjs/remax.git"
+  },
+  "homepage": "https://remaxjs.org",
+  "scripts": {
+    "clean": "rimraf lib tsconfig.tsbuildinfo",
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "test:debug": "npx --node-arg=--inspect-brk jest -i"
+  },
+  "dependencies": {
+    "@remax/cli": "workspace:*",
+    "@remax/father-build": "^1.19.8",
+    "@types/lodash": "^4.14.171",
+    "less": "^3.7.1",
+    "less-loader": "^6.0.1",
+    "lodash": "^4.17.21",
+    "sass": "^1.43.4",
+    "sass-loader": "^8.0.2",
+    "webpack-5-chain": "^8.0.1",
+    "yargs": "^16.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18",
+    "@types/yargs": "^15.0.0",
+    "babel-plugin-add-header-comment": "^1.0.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "14d4b95d916a55e4ecbe5fbda933bbc57018d7df"
+}

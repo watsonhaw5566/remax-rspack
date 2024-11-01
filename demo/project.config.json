@@ -1,0 +1,41 @@
+{
+    "miniprogramRoot": "dist/",
+    "setting": {
+        "urlCheck": false,
+        "es6": false,
+        "postcss": false,
+        "minified": true,
+        "newFeature": true,
+        "coverView": true,
+        "autoAudits": false,
+        "uglifyFileName": false,
+        "checkInvalidKey": true,
+        "checkSiteMap": true,
+        "uploadWithSourceMap": true,
+        "babelSetting": {
+            "ignore": [],
+            "disablePlugins": [],
+            "outputPath": ""
+        },
+        "bundle": false,
+        "minifyWXSS": false,
+        "minifyWXML": true,
+        "ignoreUploadUnusedFiles": true,
+        "condition": false
+    },
+    "compileType": "miniprogram",
+    "simulatorType": "wechat",
+    "simulatorPluginLibVersion": {},
+    "condition": {},
+    "appid": "wx1b5ea82ec5175c73",
+    "libVersion": "3.6.2",
+    "srcMiniprogramRoot": "dist/",
+    "packOptions": {
+        "ignore": [],
+        "include": []
+    },
+    "editorSetting": {
+        "tabIndent": "insertSpaces",
+        "tabSize": 4
+    }
+}

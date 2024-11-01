@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "esm",
+    "lib": ["ES2015", "DOM"],
+    "declaration": true,
+    "jsx": "react",
+    "types": ["@types/jest", "@types/node","miniprogram-api-typings"],
+    "downlevelIteration": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+}
