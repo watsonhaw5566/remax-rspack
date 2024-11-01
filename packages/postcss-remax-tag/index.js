@@ -1,4 +1,4 @@
-module.exports = (opts) => (root) => {
+module.exports = opts => {
   checkOpts(opts);
   return {
     postcssPlugin: 'postcss-remax-tag-plugin',
@@ -7,7 +7,7 @@ module.exports = (opts) => (root) => {
       if (rule.selector === 'page') {
         if (!warned) {
           console.warn(
-            '如果要兼容 web 应用，请不要在样式中使用 page 选择器，具体请参考 https://remaxjs.org/guide/one/web#样式',
+            '如果要兼容 web 应用，请不要在样式中使用 page 选择器，具体请参考 https://remaxjs.org/guide/one/web#样式'
           );
 
           warned = true;

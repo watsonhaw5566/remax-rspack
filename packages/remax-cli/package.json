@@ -42,6 +42,8 @@
     "@remax/runtime": "workspace:*",
     "@remax/shared": "workspace:*",
     "@remax/web": "workspace:*",
+    "@rspack/core": "^1.0.13",
+    "@rspack/dev-server": "^1.0.9",
     "@swc/core": "^1.7.36",
     "address": "^1.1.2",
     "babel-loader": "^9.1.3",
@@ -71,6 +73,8 @@
     "regenerator-runtime": "^0.14.1",
     "remax-stats": "^0.1.1",
     "resolve": "^1.12.0",
+    "rspack-chain": "^1.0.3",
+    "rspack-plugin-virtual-module": "^0.1.13",
     "schema-utils": "^2.6.1",
     "style-loader": "^4.0.0",
     "swc-minify-webpack-plugin": "^2.1.3",
@@ -81,7 +85,7 @@
     "webpack-virtual-modules": "^0.6.2",
     "webpackbar": "^6.0.1",
     "yargs": "^16.0.3",
-    "yargs-parser": "^16.0.0"
+    "yargs-parser": "^18.1.1"
   },
   "devDependencies": {
     "@babel/traverse": "^7.7.4",
@@ -91,6 +95,7 @@
     "@remax/toutiao": "workspace:*",
     "@remax/types": "workspace:*",
     "@remax/wechat": "workspace:*",
+    "@rsdoctor/rspack-plugin": "^0.4.7",
     "@types/babel__traverse": "^7.0.8",
     "@types/detect-port": "^1.3.0",
     "@types/ejs": "^3.0.0",
@@ -118,7 +123,7 @@
     "react": "^18.3.0",
     "react-reconciler": "0.29.0",
     "sander": "^0.6.0",
-    "scheduler": "^0.19.1",
+    "scheduler": "^0.23.2",
     "webpack-node-externals": "^3.0.0"
   },
   "publishConfig": {

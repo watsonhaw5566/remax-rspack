@@ -4,14 +4,14 @@ import watch from './watch';
 import type { Options } from '@remax/types';
 import API from '../API';
 import webpackConfig from './webpack/config.mini';
-import webpack from 'webpack';
+import { Configuration } from '@rspack/core';
 
 export default class MiniBuilder extends BaseBuilder {
   constructor(api: API, options: Options) {
     super(api, options, 'miniapp');
   }
 
-  createWebpackConfig(): webpack.Configuration {
+  createWebpackConfig(): Configuration {
     return webpackConfig(this);
   }
 

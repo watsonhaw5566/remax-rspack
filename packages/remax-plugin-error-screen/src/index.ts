@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import VirtualModulesPlugin from 'webpack-virtual-modules';
+import { RspackVirtualModulePlugin } from 'rspack-plugin-virtual-module';
 import { slash } from '@remax/shared';
 
 export default (_: any, { cwd, rootDir }: { cwd: string; rootDir: string }) => {
@@ -23,8 +23,8 @@ export default (_: any, { cwd, rootDir }: { cwd: string; rootDir: string }) => {
   }
   const errorBoundaryFile = path.resolve(__dirname, './ErrorBoundary.js');
 
-  const virtualModules = new VirtualModulesPlugin({
-    'node_modules/@remax/plugin-error-screen/runtime.js': `
+  const virtualModules = new RspackVirtualModulePlugin({
+    '@remax/plugin-error-screen/runtime.js': `
         import React from 'react';
         import { View } from 'remax/one';
         import ErrorScreen from '${slash(errorScreenFile)}';

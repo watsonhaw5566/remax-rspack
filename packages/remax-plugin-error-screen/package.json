@@ -26,7 +26,7 @@
     "@remax/one": "workspace:*",
     "@remax/redbox-react": "^1.0.0",
     "@remax/shared": "workspace:*",
-    "webpack-virtual-modules": "^0.4.4"
+    "rspack-plugin-virtual-module": "^0.1.13"
   },
   "devDependencies": {
     "@types/react": "^18.3.0"

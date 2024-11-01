@@ -1,4 +1,3 @@
-import { Compiler } from 'webpack';
 import SourceCache from '../../../../SourceCache';
 import createManifest from './createManifest';
 import createTemplate from './createTemplate';
@@ -6,6 +5,7 @@ import getModules from '../../../utils/modules';
 import createTurboTemplate from '../PageAsset/createTurboTemplate';
 import Builder from '../../../Builder';
 import ComponentEntry from '../../../entries/ComponentEntry';
+import { Compiler } from '@rspack/core';
 
 const PLUGIN_NAME = 'RemaxComponentAssetPlugin';
 
@@ -29,23 +29,29 @@ export default class ComponentAssetPlugin {
             if (!(component instanceof ComponentEntry)) {
               return Promise.resolve();
             }
+
             const chunk = Array.from(compilation.chunks).find(c => {
               return c.name === component.name;
             });
+
             const modules = [...getModules(chunk!, compilation), component.filename];
 
             let templatePromise;
             if (options.turboRenders) {
               // turbo page
+              // @ts-ignore todo fix here
               templatePromise = createTurboTemplate(this.builder.api, options, component, modules, meta, compilation);
             } else {
               templatePromise = createTemplate(component, options, meta, compilation, this.cache);
             }
 
-            await Promise.all([
-              await templatePromise,
-              createManifest(this.builder, component, compilation, this.cache),
-            ]);
+            await templatePromise;
+            createManifest(this.builder, component, compilation, this.cache);
+
+            // await Promise.all([
+            //   await templatePromise,
+            //   createManifest(this.builder, component, compilation, this.cache),
+            // ]);
           })
         );
         callback();

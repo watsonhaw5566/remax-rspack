@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import Config from 'webpack-5-chain';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import Config from 'rspack-chain';
+import { rspack } from '@rspack/core';
 import type { Options } from '@remax/types';
 import { slash } from '@remax/shared';
 import Builder from '../../Builder';
@@ -29,7 +29,7 @@ export function addCSSRule(webpackConfig: Config, builder: Builder, web: boolean
     if (options.watch && web) {
       rule.use('style-loader').loader(require.resolve('style-loader'));
     } else {
-      rule.use('mini-css-extract-loader').loader(MiniCssExtractPlugin.loader);
+      rule.use('mini-css-extract-loader').loader(rspack.CssExtractRspackPlugin.loader);
     }
 
     rule
@@ -95,7 +95,7 @@ export function cssConfig(webpackConfig: Config, builder: Builder, web: boolean)
       .rule(style)
       .test(file => file.endsWith(style))
       .use('mini-css-extract-loader')
-      .loader(MiniCssExtractPlugin.loader)
+      .loader(rspack.CssExtractRspackPlugin.loader)
       .end()
       .use('css-loader')
       .loader(require.resolve('css-loader'))

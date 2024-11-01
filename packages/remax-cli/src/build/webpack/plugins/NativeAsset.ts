@@ -1,6 +1,6 @@
-import { Compilation, Compiler, sources } from 'webpack';
 import Builder from '../../Builder';
 import NativeEntry from '../../entries/NativeEntry';
+import { Compiler, Compilation, sources } from '@rspack/core';
 
 const PLUGIN_NAME = 'NativeAssetPlugin';
 
@@ -12,14 +12,11 @@ export default class NativeAssetPlugin {
   }
 
   apply(compiler: Compiler) {
-    compiler.hooks.make.tapAsync(PLUGIN_NAME, async (compilation, callback) => {
-      await Promise.all(
-        Array.from(this.builder.entryCollection.nativeComponentEntries.values()).map(entry => {
-          entry.updateSource();
-          return entry.addToWebpack(compiler, compilation);
-        })
-      );
-      callback();
+    compiler.hooks.make.tap(PLUGIN_NAME, compilation => {
+      Array.from(this.builder.entryCollection.nativeComponentEntries.values()).map(entry => {
+        entry.updateSource();
+        return entry.addToWebpack(compiler);
+      });
     });
 
     compiler.hooks.watchRun.tap(PLUGIN_NAME, () => {

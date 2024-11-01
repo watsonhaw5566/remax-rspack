@@ -1,11 +1,11 @@
 import * as fs from 'fs';
-import webpack from 'webpack';
 import { getNativeAssetOutputPath, replaceExtension } from '../utils/paths';
 import VirtualEntry from './VirtualEntry';
 import Builder from '../Builder';
 import NativeAssets from '../NativeAssets';
 import output from '../utils/output';
 import { slash } from '@remax/shared';
+import rspack from '@rspack/core';
 
 interface Manifest {
   usingComponents?: Record<string, string>;
@@ -28,6 +28,7 @@ export default class NativeEntry extends VirtualEntry {
     const dependentEntries = this.getDependentEntries();
     const rawManifest = this.readRawManifest();
     const usingComponents: Manifest['usingComponents'] = rawManifest.usingComponents ?? {};
+    // 依赖的入口
     dependentEntries.forEach((entry, name) => {
       usingComponents[name] = '/' + entry.name;
     });
@@ -37,6 +38,7 @@ export default class NativeEntry extends VirtualEntry {
     };
   }
 
+  // 获取依赖的入口文件
   getDependentEntries() {
     const { usingComponents = {} } = this.readRawManifest();
     return Object.keys(usingComponents).reduce((acc: Map<string, NativeEntry>, name: string) => {
@@ -75,7 +77,7 @@ export default class NativeEntry extends VirtualEntry {
     return this.assets.getAll();
   }
 
-  watchAssets(loaderContext: webpack.LoaderContext<any>) {
+  watchAssets(loaderContext: rspack.LoaderContext<any>) {
     this.assets.getAll().forEach(asset => {
       loaderContext.addDependency(asset.filename);
     });

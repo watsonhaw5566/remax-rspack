@@ -1,5 +1,4 @@
-import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
+import { Configuration } from '@rspack/core';
 import detect from 'detect-port';
 import type { Options } from '@remax/types';
 import webpackConfig from './webpack/config.web';
@@ -9,13 +8,14 @@ import output from './utils/output';
 import API from '../API';
 import watch from './watch';
 import Builder from './Builder';
+import { RspackDevServer } from '@rspack/dev-server';
 
 export default class WebBuilder extends Builder {
   constructor(api: API, options: Options) {
     super(api, options, 'webapp');
   }
 
-  createWebpackConfig(): webpack.Configuration {
+  createWebpackConfig(): Configuration {
     return this.options.web?.mpa ? mpaWebpackConfig(this) : webpackConfig(this);
   }
 
@@ -46,7 +46,7 @@ export default class WebBuilder extends Builder {
       output.message(`📎 http://localhost:${port}`, 'blue');
       output.message(`📎 http://${address.ip()}:${port}\n`, 'blue');
 
-      const server = new WebpackDevServer(this.webpackCompiler, this.webpackConfig.devServer);
+      const server = new RspackDevServer(this.webpackConfig.devServer!, this.webpackCompiler);
 
       this.webpackCompiler.hooks.done.tap('web-dev', stats => {
         console.log(
@@ -59,13 +59,7 @@ export default class WebBuilder extends Builder {
           })
         );
       });
-      server.listen(port, '0.0.0.0', error => {
-        if (error) {
-          console.error(error);
-          process.exit(1);
-        }
-      });
-
+      server.server.listen(port);
       watch(this, server);
     });
   }

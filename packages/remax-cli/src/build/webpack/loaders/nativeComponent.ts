@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import webpack from 'webpack';
+import rspack from '@rspack/core';
 import Store from '@remax/build-store';
 import { isNativeComponent, slash } from '@remax/shared';
 import { getNativeAssetOutputPath, replaceExtension } from '../../utils/paths';
@@ -13,7 +13,7 @@ function isEntryFile(filepath: string) {
   return EntryFilePathRegex.test(filepath);
 }
 
-export default async function nativeModule(this: webpack.LoaderContext<any>, source: string) {
+export default async function nativeModule(this: rspack.LoaderContext<any>, source: string) {
   this.cacheable();
 
   const callback = this.async()!;
@@ -29,12 +29,11 @@ export default async function nativeModule(this: webpack.LoaderContext<any>, sou
     builder.entryCollection.nativeComponentEntries.get(entryRealPath);
 
   if (entry instanceof NativeEntry && resourcePath != entryRealPath) {
-    entry.watchAssets(this);
     await Promise.all(
       Array.from(entry.getDependentEntries().values()).map(component => {
         builder.entryCollection.nativeComponentEntries.set(component.filename, component);
         component.watchAssets(this);
-        return component.addToWebpack(this._compiler!, this._compilation!);
+        return component.addToWebpack(this._compiler);
       })
     );
   }
@@ -55,12 +54,11 @@ export default async function nativeModule(this: webpack.LoaderContext<any>, sou
     const name = getNativeAssetOutputPath(replaceExtension(resourcePath, ''), builder.options);
     // loader 处理的文件顺序不固定，使用输出路径计算组件 id
     const id = Store.registerNativeComponent(resourcePath, name);
+    console.log('id', id);
     const entry = new NativeEntry(builder, name, resourcePath);
     builder.entryCollection.nativeComponentEntries.set(entry.filename, entry);
     entry.watchAssets(this);
-    if (this._compiler && this._compilation) {
-      await entry.addToWebpack(this._compiler!, this._compilation!);
-    }
+    entry.addToWebpack(this._compiler);
     finalSource = `import { createNativeComponent } from '@remax/runtime';
 export default createNativeComponent('${id}')
 `;

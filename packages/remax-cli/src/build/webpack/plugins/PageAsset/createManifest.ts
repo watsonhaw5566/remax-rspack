@@ -1,9 +1,9 @@
 import * as path from 'path';
-import { Compilation, sources } from 'webpack';
 import SourceCache from '../../../../SourceCache';
 import { getUsingComponents } from '../getUsingComponents';
 import Builder from '../../../Builder';
 import PageEntry from '../../../entries/PageEntry';
+import { Compilation, sources } from '@rspack/core';
 
 export default function createManifest(
   builder: Builder,

@@ -1,10 +1,10 @@
-import { Compiler, Compilation, Chunk, sources } from 'webpack';
 import * as path from 'path';
-import { slash } from '@remax/shared';
+// import { slash } from '@remax/shared';
 import Store from '@remax/build-store';
-import getModules from '../../utils/modules';
+// import getModules from '../../utils/modules';
 import Builder from '../../Builder';
 import PageEntry from '../../entries/PageEntry';
+import { Compilation, Compiler,Chunk,sources } from '@rspack/core';
 
 const PLUGIN_NAME = 'RemaxRuntimeOptionsPlugin';
 
@@ -22,7 +22,7 @@ export default class RuntimeOptionsPlugin {
 
   apply(compiler: Compiler) {
     compiler.hooks.thisCompilation.tap(PLUGIN_NAME, (compilation: Compilation) => {
-      compilation.hooks.optimizeChunks.tap(PLUGIN_NAME, chunks => {
+      compilation.hooks.optimizeChunkModules.tap(PLUGIN_NAME, chunks => {
         const hostComponents = this.getHostComponents();
         const pageEvents = this.getPageEvents(chunks as Chunk[], compilation);
         const appEvents = this.getAppEvents();
@@ -66,21 +66,21 @@ export default class RuntimeOptionsPlugin {
       if (!(page instanceof PageEntry)) {
         return;
       }
-      const chunk = Array.from(chunks).find(c => {
-        return c.name === page.name;
-      });
+      // const chunk = Array.from(chunks).find(c => {
+      //   return c.name === page.name;
+      // });
 
-      const modules = getModules(chunk!, compilation);
+      // const modules = getModules(chunk!, compilation);
 
-      events[page.name] = Array.from(
-        new Set(
-          modules
-            .reduce<string[]>((acc, cur) => {
-              return [...acc, ...(Store.pageEvents.get(slash(cur)) || []), ...(pageClassEvents.get(slash(cur)) || [])];
-            }, [])
-            .sort()
-        )
-      );
+      // events[page.name] = Array.from(
+      //   new Set(
+      //     modules
+      //       .reduce<string[]>((acc, cur) => {
+      //         return [...acc, ...(Store.pageEvents.get(slash(cur)) || []), ...(pageClassEvents.get(slash(cur)) || [])];
+      //       }, [])
+      //       .sort()
+      //   )
+      // );
     });
 
     return events;

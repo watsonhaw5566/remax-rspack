@@ -1,27 +1,28 @@
 import { sortBy } from 'lodash';
-import { Compilation, sources } from 'webpack';
+// import { Compilation, sources } from 'webpack';
 import ejs from 'ejs';
 import type { Options, Meta, EntryInfo } from '@remax/types';
 import Store from '@remax/build-store';
 import SourceCache from '../../../../SourceCache';
-import { getUsingComponents } from '../getUsingComponents';
+// import { getUsingComponents } from '../getUsingComponents';
 import { slash } from '@remax/shared';
 import API from '../../../../API';
 import NormalEntry from '../../../entries/NormalEntry';
 import PageEntry from '../../../entries/PageEntry';
 import { ensureDepth } from '../../../../defaultOptions/UNSAFE_wechatTemplateDepth';
+import { Compilation, sources } from '@rspack/core';
 
 export function createRenderOptions(page: string, compilation: Compilation, options: Options, filter = true) {
   const components = new Map(Store.getCollectedComponents());
 
   if (filter) {
-    getUsingComponents(page, compilation, options).forEach(component => {
-      components.set(component.id, {
-        id: component.id,
-        props: component.props,
-        type: 'native',
-      });
-    });
+    // getUsingComponents(page, compilation, options).forEach(component => {
+    //   components.set(component.id, {
+    //     id: component.id,
+    //     props: component.props,
+    //     type: 'native',
+    //   });
+    // });
   }
 
   return {
@@ -84,13 +85,13 @@ export async function createBaseTemplate(
 
   pages.forEach(page => {
     if (page instanceof PageEntry) {
-      getUsingComponents(page.filename, compilation, options).forEach(component => {
-        components.set(component.id, {
-          id: component.id,
-          props: component.props,
-          type: 'native',
-        });
-      });
+      // getUsingComponents(page.filename, compilation, options).forEach(component => {
+      //   components.set(component.id, {
+      //     id: component.id,
+      //     props: component.props,
+      //     type: 'native',
+      //   });
+      // });
     }
   });
 

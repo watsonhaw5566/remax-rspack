@@ -3,14 +3,14 @@ import API from '../API';
 import output from './utils/output';
 import Builder from './Builder';
 import webpackConfig from './webpack/config.miniComponent';
-import webpack from 'webpack';
+import { Configuration } from '@rspack/core';
 
 export default class MiniPluginBuilder extends Builder {
   constructor(api: API, options: Options) {
     super(api, options, 'minicomponent');
   }
 
-  createWebpackConfig(): webpack.Configuration {
+  createWebpackConfig(): Configuration {
     return webpackConfig(this);
   }
 

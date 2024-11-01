@@ -1,4 +1,4 @@
-import webpack from 'webpack';
+import { Compiler, Configuration, rspack } from '@rspack/core';
 import EntryCollection from './EntryCollection';
 import ProjectPath from './ProjectPath';
 import readManifest from '../readManifest';
@@ -13,9 +13,9 @@ abstract class Builder {
   projectConfig: AppConfig | MiniPluginConfig;
   projectThemeConfig: any;
   entryCollection: EntryCollection;
-  webpackCompiler: webpack.Compiler;
+  webpackCompiler: Compiler;
   buildType: BuildType;
-  webpackConfig: any;
+  webpackConfig: Configuration;
 
   protected constructor(api: API, options: Options, buildType: BuildType) {
     this.api = api;
@@ -36,13 +36,13 @@ abstract class Builder {
     this.webpackCompiler = this.createWebpackCompiler();
   }
 
-  abstract run(): webpack.Compiler;
+  abstract run(): Compiler;
 
   abstract build(): void;
 
   abstract watch(): void;
 
-  abstract createWebpackConfig(): webpack.Configuration;
+  abstract createWebpackConfig(): Configuration;
 
   fetchProjectConfig() {
     const configFile =
@@ -64,22 +64,21 @@ abstract class Builder {
     const configFile =
       this.buildType === 'miniplugin' ? this.projectPath.pluginConfigFile() : this.projectPath.themeConfigFile();
     const config = readManifest(configFile, this.target, false);
-    const finalConfig = ['miniapp'].includes(this.buildType) ? this.api.onThemeConfig(config) : config;
-    this.projectThemeConfig = finalConfig;
+    this.projectThemeConfig = ['miniapp'].includes(this.buildType) ? this.api.onThemeConfig(config) : config;
     return this.projectThemeConfig;
   }
 
-  createWebpackCompiler(): webpack.Compiler {
+  createWebpackCompiler(): Compiler {
     const cfg = this.webpackConfig;
 
-    const index = cfg.plugins.findIndex((e: any) => e.constructor.name === 'MiniCssExtractPlugin');
-    const cssPlugin = cfg.plugins[index];
+    // const index = cfg.plugins.findIndex((e: any) => e.constructor.name === 'MiniCssExtractPlugin');
+    // const cssPlugin = cfg.plugins[index];
+    //
+    // if (cssPlugin) {
+    //   cfg.plugins[index] = cssPlugin;
+    // }
 
-    if (cssPlugin) {
-      cfg.plugins[index] = cssPlugin;
-    }
-
-    return webpack(cfg);
+    return rspack(cfg);
   }
 }
 

@@ -1,5 +1,4 @@
-import Config from 'webpack-5-chain';
-import * as webpack from 'webpack';
+import Config from 'rspack-chain';
 import { moduleMatcher, targetExtensions } from '../../extensions';
 import { addCSSRule, cssConfig, RuleConfig } from './config/css';
 import fs from 'fs';
@@ -8,6 +7,7 @@ import WebpackBar from 'webpackbar';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import Builder from '../Builder';
+import { rspack } from '@rspack/core';
 
 export default function webBaseConfig(config: Config, builder: Builder) {
   config.devtool(process.env.NODE_ENV === 'development' ? 'cheap-module-source-map' : false);
@@ -79,16 +79,17 @@ export default function webBaseConfig(config: Config, builder: Builder) {
 
   const context = {
     config,
-    webpack,
+    rspack,
     addCSSRule: (ruleConfig: RuleConfig) => {
       addCSSRule(config, builder, true, ruleConfig);
     },
   };
 
   if (typeof builder.options.configWebpack === 'function') {
+    // @ts-ignore
     builder.options.configWebpack(context);
   }
-
+  // @ts-ignore
   builder.api.configWebpack(context);
 
   return config;

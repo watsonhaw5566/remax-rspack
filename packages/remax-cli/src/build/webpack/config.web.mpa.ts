@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
-import webpack from 'webpack';
-import Config from 'webpack-5-chain';
+import { Configuration } from '@rspack/core';
+import Config from 'rspack-chain';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import baseConfig from './baseConfig';
 import webBaseConfig from './webBaseConfig';
@@ -9,7 +9,7 @@ import Builder from '../Builder';
 import FallbackEntry from '../entries/FallbackEntry';
 import VirtualEntry from '../entries/VirtualEntry';
 
-export default function webpackConfig(builder: Builder): webpack.Configuration {
+export default function webpackConfig(builder: Builder): Configuration {
   const config = new Config();
 
   baseConfig(config, builder);

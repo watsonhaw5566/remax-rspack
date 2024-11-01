@@ -1,4 +1,3 @@
-import { Compilation, sources } from 'webpack';
 import ejs from 'ejs';
 import type { Options, Meta, EntryInfo } from '@remax/types';
 import { slash } from '@remax/shared';
@@ -7,6 +6,7 @@ import * as TurboRender from 'babel-plugin-remax-turbo-render';
 import { sortBy } from 'lodash';
 import { createRenderOptions } from './createTemplate';
 import API from '../../../../API';
+import { Compilation, sources } from '@rspack/core';
 
 export default async function createTurboTemplate(
   api: API,

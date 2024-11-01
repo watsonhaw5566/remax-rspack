@@ -5,8 +5,8 @@ import getModules from '../../../utils/modules';
 import SourceCache from '../../../../SourceCache';
 import createIsolatedTemplate from './createIsolatedTemplate';
 import Builder from '../../../Builder';
-import { Compiler } from 'webpack';
 import PageEntry from '../../../entries/PageEntry';
+import { Compiler } from '@rspack/core';
 
 const PLUGIN_NAME = 'RemaxPageAssetPlugin';
 
@@ -24,7 +24,7 @@ export default class PageAssetPlugin {
       const meta = this.builder.api.getMeta();
       const { entries } = this.builder.entryCollection;
 
-      compilation.hooks.processAssets.tapAsync(PLUGIN_NAME, async (assets, callback) => {
+      compilation.hooks.processAssets.tapAsync(PLUGIN_NAME, async (_assets, callback) => {
         // base template
         await createBaseTemplate(entries, options, meta, compilation, this.cache);
         Promise.all(
@@ -35,8 +35,8 @@ export default class PageAssetPlugin {
             const chunk = Array.from(compilation.chunks).find(c => {
               return c.name === page.name;
             });
-
             const modules = [...getModules(chunk!, compilation), page.filename];
+            // const modules: string[] = [];
             createManifest(this.builder, page, compilation, this.cache);
 
             if (options.turboRenders) {

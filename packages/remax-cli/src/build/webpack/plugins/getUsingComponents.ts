@@ -1,8 +1,9 @@
-import * as path from 'path';
+// import * as path from 'path';
 import Store from '@remax/build-store';
 import { slash } from '@remax/shared';
-import { NormalModule } from 'webpack';
-import { getNativeAssetOutputPath } from '../../utils/paths';
+// import { getNativeAssetOutputPath } from '../../utils/paths';
+import { Compilation, Module } from '@rspack/core';
+import { Options } from '@remax/types';
 
 interface Component {
   id: string;
@@ -10,27 +11,27 @@ interface Component {
   props: string[];
 }
 
-function findModule(compilation: any, file: string) {
-  return Array.from(compilation._modules.values()).find((m: any) => slash(m.resource) === file) as NormalModule;
+function findModule(compilation: Compilation, file: string) {
+  return Array.from(compilation.modules.values()).find(m => slash(m.resource!) === file) as Module;
 }
 
-function compositionComponents(compilation: any) {
-  const cc = new Map<string, Set<string>>();
-  Store.compositionComponents.forEach((components, file) => {
-    const module = findModule(compilation, file);
-    module.dependencies.forEach((dep: any) => {
-      const component = components.get(dep.request);
-      const mod = compilation.moduleGraph.getModule(dep);
-      if (component && mod) {
-        const resource = slash(mod.resource);
-        const compositionComponent = cc.get(resource) || new Set<string>();
-        component.props.forEach(compositionComponent.add, compositionComponent);
-        cc.set(resource, compositionComponent);
-      }
-    });
-  });
-  return cc;
-}
+// function compositionComponents(compilation: Compilation) {
+//   const cc = new Map<string, Set<string>>();
+//   Store.compositionComponents.forEach((components, file) => {
+//     const module = findModule(compilation, file);
+//     // module.dependencies.forEach((dep: any) => {
+//     //   const component = components.get(dep.request);
+//     //   const mod = compilation.moduleGraph.getModule(dep);
+//     //   if (component && mod) {
+//     //     const resource = slash(mod.resource);
+//     //     const compositionComponent = cc.get(resource) || new Set<string>();
+//     //     component.props.forEach(compositionComponent.add, compositionComponent);
+//     //     cc.set(resource, compositionComponent);
+//     //   }
+//     // });
+//   });
+//   return cc;
+// }
 
 /**
  * 编译小程序自定义组件流程
@@ -40,15 +41,20 @@ function compositionComponents(compilation: any) {
  * 3. 在 getUsingComponents 方法中通过 compilation.modules 递归遍历所有 page 的 dependencies；
  * 4. 通过 1、2 中的信息从 dependencies 中找出 page 依赖的小程序自定义组件。
  */
-function getUsingComponents(page: string, compilation: any, options: any, prefixPath = ''): Map<string, Component> {
+function getUsingComponents(
+  page: string,
+  compilation: Compilation,
+  options: Options,
+  prefixPath = ''
+): Map<string, Component> {
   const components = new Map<string, Component>();
   const handledModules = new Set<string>();
 
-  const getComponents = (module: any) => {
+  const getComponents = (module: Module) => {
     if (!module) {
       return;
     }
-    const resource = slash(module.resource);
+    const resource = slash(module.resource!);
     // 防止循环依赖
     if (resource) {
       if (handledModules.has(resource)) {
@@ -66,36 +72,41 @@ function getUsingComponents(page: string, compilation: any, options: any, prefix
       });
     });
 
-    module.dependencies.forEach((dep: any) => {
-      const mod = compilation.moduleGraph.getModule(dep);
-      if (mod) {
-        let depModule;
-        if (mod.resource) {
-          depModule = mod;
-        } else if (mod.rootModule) {
-          depModule = mod.rootModule;
-        } else {
-          return;
-        }
-        const depResource = slash(depModule.resource);
-        const nativeComponent = Store.nativeComponents.get(depResource);
-        if (nativeComponent) {
-          const componentProps = compositionComponents(compilation).get(depResource);
-          const componentPath = slash(path.join(prefixPath, getNativeAssetOutputPath(depResource, options)));
-          const props = Array.from(componentProps ? componentProps.values() : []);
-          components.set(nativeComponent.id, {
-            id: nativeComponent.id,
-            path: componentPath.replace(new RegExp(`\\${path.extname(componentPath)}$`), ''),
-            props,
-          });
-        }
-        getComponents(depModule);
-      }
-    });
+    // const pageIssuerName = page.replace(`${options.cwd}`, '.');
+    //
+    // const state = compilation.getStats().toJson({ dependentModules: true });
+    //
+    // const pageDepModules: StatsModule[] | undefined = state.modules?.filter(item => item.issuerName === pageIssuerName);
+    // console.log(pageDepModules);
+
+    // module.dependencies.forEach((dep: any) => {
+    //   const mod = compilation.moduleGraph.getModule(dep);
+    //   if (mod) {
+    //     let depModule;
+    //     if (mod.resource) {
+    //       depModule = mod;
+    //     } else if (mod.rootModule) {
+    //       depModule = mod.rootModule;
+    //     } else {
+    //       return;
+    //     }
+    //     const depResource = slash(depModule.resource);
+    //     const nativeComponent = Store.nativeComponents.get(depResource);
+    //     if (nativeComponent) {
+    //       const componentProps = compositionComponents(compilation).get(depResource);
+    //       const componentPath = slash(path.join(prefixPath, getNativeAssetOutputPath(depResource, options)));
+    //       const props = Array.from(componentProps ? componentProps.values() : []);
+    //       components.set(nativeComponent.id, {
+    //         id: nativeComponent.id,
+    //         path: componentPath.replace(new RegExp(`\\${path.extname(componentPath)}$`), ''),
+    //         props,
+    //       });
+    //     }
+    //     getComponents(depModule);
+    //   }
+    // });
   };
-
   getComponents(findModule(compilation, page));
-
   return components;
 }
 

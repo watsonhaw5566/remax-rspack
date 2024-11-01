@@ -1,6 +1,6 @@
 import * as path from 'path';
-import * as webpack from 'webpack';
-import Config from 'webpack-5-chain';
+import rspack from '@rspack/core';
+import Config from 'rspack-chain';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import WebpackBar from 'webpackbar';
 import type { Options } from '@remax/types';
@@ -22,6 +22,7 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import Builder from '../Builder';
 import NativeEntry from '../entries/NativeEntry';
 import output from '../utils/output';
+import { Configuration } from '@rspack/core';
 
 function resolveBabelConfig(options: Options) {
   if (fs.existsSync(path.join(options.cwd, 'babel.config.js'))) {
@@ -30,7 +31,7 @@ function resolveBabelConfig(options: Options) {
   return false;
 }
 
-export default function webpackConfig(builder: Builder): webpack.Configuration {
+export default function webpackConfig(builder: Builder): Configuration {
   const config = new Config();
 
   baseConfig(config, builder);
@@ -205,16 +206,17 @@ export default function webpackConfig(builder: Builder): webpack.Configuration {
 
   const context = {
     config,
-    webpack,
+    rspack,
     addCSSRule: (ruleConfig: RuleConfig) => {
       addCSSRule(config, builder, false, ruleConfig);
     },
   };
 
   if (typeof builder.options.configWebpack === 'function') {
+    // @ts-ignore
     builder.options.configWebpack(context);
   }
-
+  // @ts-ignore
   builder.api.configWebpack(context);
 
   return config.toConfig();

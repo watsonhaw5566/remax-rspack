@@ -1,5 +1,4 @@
 import { sortBy } from 'lodash';
-import { Compilation, sources } from 'webpack';
 import ejs from 'ejs';
 import type { Options, Meta } from '@remax/types';
 import Store from '@remax/build-store';
@@ -8,6 +7,7 @@ import { slash } from '@remax/shared';
 import { getUsingComponents } from '../getUsingComponents';
 import path from 'path';
 import ComponentEntry from '../../../entries/ComponentEntry';
+import { Compilation, sources } from '@rspack/core';
 
 export function createRenderOptions(componentPath: string, compilation: Compilation, options: Options) {
   const components = new Map(Store.getCollectedComponents());

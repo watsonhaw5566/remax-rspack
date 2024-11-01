@@ -1,7 +1,7 @@
 import ejs from 'ejs';
-import { Compilation, sources } from 'webpack';
 import type { Meta } from '@remax/types';
 import Store, { ExtractedTemplate } from '@remax/build-store';
+import { Compilation, sources } from '@rspack/core';
 
 export default async function createIsolatedTemplate(meta: Meta, compilation: Compilation) {
   const templates: ExtractedTemplate[] = [];
